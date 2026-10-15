@@ -1,5 +1,6 @@
 package com.ownfit.app.ui.workouts
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -7,6 +8,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -41,6 +43,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.ownfit.app.data.AppState
 import com.ownfit.app.data.Category
@@ -50,6 +53,7 @@ import com.ownfit.app.data.Muscle
 import com.ownfit.app.engine.PlanGenerator
 import com.ownfit.app.ui.Nav
 import com.ownfit.app.ui.Screen
+import com.ownfit.app.ui.components.ExerciseAnimation
 import com.ownfit.app.ui.onboarding.Segmented
 
 @Composable
@@ -162,6 +166,14 @@ fun ExerciseLibraryList(
             items(list, key = { it.id }) { e ->
                 val sel = e.id in selected
                 ListItem(
+                    leadingContent = {
+                        ExerciseAnimation(
+                            e, state.profile?.gender ?: com.ownfit.app.data.Gender.OTHER,
+                            Modifier.size(52.dp).clip(RoundedCornerShape(12.dp))
+                                .background(MaterialTheme.colorScheme.surfaceContainerHigh),
+                            playing = false,
+                        )
+                    },
                     headlineContent = { Text(e.name) },
                     supportingContent = {
                         Text(

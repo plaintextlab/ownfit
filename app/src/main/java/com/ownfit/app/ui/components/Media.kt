@@ -7,7 +7,10 @@ import android.webkit.WebChromeClient
 import android.webkit.WebView
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
@@ -46,9 +49,9 @@ object YouTube {
     }
 }
 
-/** Animated GIF / image / drawn figure — whichever is available, in that order. */
+/** User GIF/image if set, otherwise the built-in animation with a small muscle map. */
 @Composable
-fun ExerciseVisual(exercise: Exercise?, media: Media?, gender: Gender, modifier: Modifier = Modifier) {
+fun ExerciseVisual(exercise: Exercise?, media: Media?, gender: Gender, modifier: Modifier = Modifier, playing: Boolean = true) {
     val model = OwnFitApp.instance.store.resolveMedia(media?.image)
     Box(modifier, contentAlignment = Alignment.Center) {
         if (model != null) {
@@ -59,7 +62,10 @@ fun ExerciseVisual(exercise: Exercise?, media: Media?, gender: Gender, modifier:
                 modifier = Modifier.fillMaxWidth().heightIn(max = 320.dp).clip(RoundedCornerShape(24.dp)),
             )
         } else {
-            BodyFigure(gender, exercise?.muscles.orEmpty(), Modifier.heightIn(max = 300.dp))
+            ExerciseAnimation(exercise, gender, Modifier.fillMaxSize(), playing = playing)
+            if (exercise?.muscles?.isNotEmpty() == true) {
+                BodyFigure(gender, exercise.muscles, Modifier.align(Alignment.TopEnd).padding(4.dp).width(34.dp))
+            }
         }
     }
 }

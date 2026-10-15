@@ -238,7 +238,7 @@ fun PlayerScreen(state: AppState, workout: Workout, fromPlan: Boolean, onExit: (
             } else if (showVideo && media?.youtube != null) {
                 YouTubeEmbed(media.youtube)
             } else {
-                ExerciseVisual(work.exercise, media, gender, Modifier.fillMaxWidth().height(260.dp))
+                ExerciseVisual(work.exercise, media, gender, Modifier.fillMaxWidth().height(260.dp), playing = !paused)
             }
 
             if (media?.youtube != null && breath == null) {

@@ -67,7 +67,7 @@ import com.ownfit.app.data.Injury
 import com.ownfit.app.data.Level
 import com.ownfit.app.data.Profile
 import com.ownfit.app.engine.PlanGenerator
-import com.ownfit.app.ui.components.BodyFigure
+import com.ownfit.app.ui.components.ExerciseAnimation
 import com.ownfit.app.ui.components.ChipGroup
 import com.ownfit.app.ui.components.SectionTitle
 import kotlinx.coroutines.launch
@@ -137,7 +137,7 @@ fun OnboardingScreen(state: AppState, initial: Profile?, onDone: () -> Unit) {
                             ChoiceCard(g.label, null, p.gender == g) { p = p.copy(gender = g) }
                         }
                         Box(Modifier.fillMaxWidth().padding(top = 8.dp), contentAlignment = Alignment.Center) {
-                            BodyFigure(p.gender, emptyList(), Modifier.height(220.dp))
+                            ExerciseAnimation(null, p.gender, Modifier.height(220.dp).fillMaxWidth(), motionId = "jumping_jacks")
                         }
                     }
                     2 -> {
