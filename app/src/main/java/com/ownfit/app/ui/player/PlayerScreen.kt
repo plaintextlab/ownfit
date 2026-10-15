@@ -251,9 +251,21 @@ fun PlayerScreen(state: AppState, workout: Workout, fromPlan: Boolean, onExit: (
             }
 
             if (media?.youtube != null && breath == null) {
-                TextButton(onClick = { showVideo = !showVideo }) {
-                    Icon(Icons.Outlined.OndemandVideo, null)
-                    Text(if (showVideo) "  Hide video (timer paused)" else "  Watch demo")
+                Row(horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
+                    TextButton(onClick = {
+                        showVideo = !showVideo
+                        if (showVideo) Music.pause() // let the video's sound through
+                    }) {
+                        Icon(Icons.Outlined.OndemandVideo, null)
+                        Text(if (showVideo) "  Hide video (timer paused)" else "  Watch demo")
+                    }
+                    // Some uploaders block embedding — the YouTube app always works.
+                    TextButton(onClick = {
+                        showVideo = false
+                        paused = true
+                        Music.pause()
+                        com.ownfit.app.ui.components.YouTube.open(ctx, media.youtube)
+                    }) { Text("Open in YouTube") }
                 }
             }
 
