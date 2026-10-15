@@ -13,8 +13,20 @@ android {
         applicationId = "com.ownfit.app"
         minSdk = 26
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0.0"
+        // CI passes -PversionCode=<run number> so each release installs as an update.
+        versionCode = (findProperty("versionCode") as String?)?.toInt() ?: 1
+        versionName = (findProperty("versionName") as String?) ?: "1.0.0"
+    }
+
+    // Stable release signing from env (CI secrets). Without it, falls back to the debug key.
+    val keystore = System.getenv("OWNFIT_KEYSTORE")?.let { file(it) }?.takeIf { it.exists() }
+    signingConfigs {
+        if (keystore != null) create("release") {
+            storeFile = keystore
+            storePassword = System.getenv("OWNFIT_KEYSTORE_PASSWORD")
+            keyAlias = System.getenv("OWNFIT_KEY_ALIAS")
+            keyPassword = System.getenv("OWNFIT_KEY_PASSWORD")
+        }
     }
 
     buildTypes {
@@ -22,9 +34,7 @@ android {
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-            // Signed with the debug key so the release APK is installable out of the box.
-            // Replace with your own signingConfig before publishing to the Play Store.
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = signingConfigs.findByName("release") ?: signingConfigs.getByName("debug")
         }
     }
 
