@@ -18,7 +18,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val state by app.store.state.collectAsStateWithLifecycle()
-            OwnFitTheme(state.settings.theme, state.settings.dynamicColor) {
+            OwnFitTheme(state.settings.theme) {
                 OwnFitRoot(state)
             }
         }

@@ -15,6 +15,15 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Bolt
+import androidx.compose.material.icons.outlined.CalendarMonth
+import androidx.compose.material.icons.outlined.FitnessCenter
+import androidx.compose.material.icons.outlined.History
+import androidx.compose.material.icons.outlined.LocalFireDepartment
+import androidx.compose.material.icons.outlined.Timer
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
@@ -74,17 +83,18 @@ fun ProgressScreen(state: AppState) {
     ) {
         item {
             Text("Progress", style = MaterialTheme.typography.headlineMedium)
+            val gb = com.ownfit.app.ui.theme.gruvbox()
             Row(Modifier.fillMaxWidth().padding(top = 16.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                StatCard("🔥 ${stats.streak}", "day streak", Modifier.weight(1f))
-                StatCard("${stats.total}", "workouts", Modifier.weight(1f))
+                StatCard("${stats.streak}", "day streak", Modifier.weight(1f), Icons.Outlined.LocalFireDepartment, gb.orange)
+                StatCard("${stats.total}", "workouts", Modifier.weight(1f), Icons.Outlined.FitnessCenter, gb.aqua)
             }
             Row(Modifier.fillMaxWidth().padding(top = 10.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                StatCard("${stats.minutes}", "minutes", Modifier.weight(1f))
-                StatCard("${stats.kcal}", "kcal (est.)", Modifier.weight(1f))
+                StatCard("${stats.minutes}", "minutes", Modifier.weight(1f), Icons.Outlined.Timer, gb.blue)
+                StatCard("${stats.kcal}", "kcal (est.)", Modifier.weight(1f), Icons.Outlined.Bolt, gb.yellow)
             }
-            SectionTitle("Last 16 weeks")
+            SectionTitle("Last 16 weeks", icon = Icons.Outlined.CalendarMonth, tint = gb.green)
             Heatmap(stats.perDay)
-            SectionTitle("History")
+            SectionTitle("History", icon = Icons.Outlined.History, tint = gb.purple)
             if (state.history.isEmpty()) Text(
                 "Your finished workouts will show up here.",
                 style = MaterialTheme.typography.bodyMedium,
@@ -103,14 +113,15 @@ fun ProgressScreen(state: AppState) {
 }
 
 @Composable
-private fun StatCard(value: String, label: String, modifier: Modifier) {
+private fun StatCard(value: String, label: String, modifier: Modifier, icon: ImageVector, tint: Color) {
     Card(
         modifier,
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
     ) {
         Column(Modifier.padding(16.dp)) {
-            Text(value, style = MaterialTheme.typography.headlineSmall, color = MaterialTheme.colorScheme.primary)
+            Icon(icon, null, tint = tint)
+            Text(value, style = MaterialTheme.typography.headlineSmall, color = tint, modifier = Modifier.padding(top = 6.dp))
             Text(label, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
     }

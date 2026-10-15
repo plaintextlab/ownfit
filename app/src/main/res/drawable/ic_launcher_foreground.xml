@@ -1,9 +1,11 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp" android:height="108dp"
     android:viewportWidth="108" android:viewportHeight="108">
-    <!-- Dumbbell mark -->
+    <!-- Gruvbox dumbbell: yellow bar, orange plates, aqua grip -->
     <group android:translateX="24" android:translateY="24">
-        <path android:fillColor="#FFFFFFFF"
-            android:pathData="M4,24h4v12H4z M10,18h6v24h-6z M44,18h6v24h-6z M52,24h4v12h-4z M16,27h28v6H16z"/>
+        <path android:fillColor="#FFFABD2F" android:pathData="M16,27h28v6H16z"/>
+        <path android:fillColor="#FF8EC07C" android:pathData="M25,26h10v8h-10z"/>
+        <path android:fillColor="#FFFE8019" android:pathData="M10,17h6v26h-6z M44,17h6v26h-6z"/>
+        <path android:fillColor="#FFD65D0E" android:pathData="M4,23h5v14H4z M51,23h5v14h-5z"/>
     </group>
 </vector>

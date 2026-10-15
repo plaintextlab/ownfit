@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.FilterChip
@@ -29,13 +30,19 @@ fun fmtClock(sec: Int): String = "%d:%02d".format(sec / 60, sec % 60)
 fun fmtMinutes(sec: Int): String = if (sec < 60) "${sec}s" else "${(sec + 30) / 60} min"
 
 @Composable
-fun SectionTitle(text: String, modifier: Modifier = Modifier) {
-    Text(
-        text,
-        style = MaterialTheme.typography.titleSmall,
-        color = MaterialTheme.colorScheme.primary,
-        modifier = modifier.padding(top = 20.dp, bottom = 8.dp),
-    )
+fun SectionTitle(
+    text: String,
+    modifier: Modifier = Modifier,
+    icon: androidx.compose.ui.graphics.vector.ImageVector? = null,
+    tint: androidx.compose.ui.graphics.Color = MaterialTheme.colorScheme.primary,
+) {
+    androidx.compose.foundation.layout.Row(
+        modifier.padding(top = 20.dp, bottom = 8.dp),
+        verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
+    ) {
+        if (icon != null) Icon(icon, null, tint = tint, modifier = Modifier.padding(end = 8.dp).size(20.dp))
+        Text(text, style = MaterialTheme.typography.titleSmall, color = tint)
+    }
 }
 
 /** Wrapping chips. [selected] decides check state; [onToggle] fires on tap. */

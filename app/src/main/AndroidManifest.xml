@@ -24,10 +24,90 @@
             android:exported="true"
             android:windowSoftInputMode="adjustResize"
             android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden|uiMode">
+        </activity>
+        <!-- Launcher name "OwnFit" (switched in Settings) -->
+        <activity-alias
+            android:name=".LauncherOwnFit"
+            android:targetActivity=".MainActivity"
+            android:label="OwnFit"
+            android:icon="@mipmap/ic_launcher"
+            android:roundIcon="@mipmap/ic_launcher"
+            android:enabled="true"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
+        </activity-alias>
+        <!-- Launcher name "Workout" (switched in Settings) -->
+        <activity-alias
+            android:name=".LauncherWorkout"
+            android:targetActivity=".MainActivity"
+            android:label="Workout"
+            android:icon="@mipmap/ic_launcher"
+            android:roundIcon="@mipmap/ic_launcher"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <!-- Launcher name "Fitness" (switched in Settings) -->
+        <activity-alias
+            android:name=".LauncherFitness"
+            android:targetActivity=".MainActivity"
+            android:label="Fitness"
+            android:icon="@mipmap/ic_launcher"
+            android:roundIcon="@mipmap/ic_launcher"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <!-- Launcher name "Gym" (switched in Settings) -->
+        <activity-alias
+            android:name=".LauncherGym"
+            android:targetActivity=".MainActivity"
+            android:label="Gym"
+            android:icon="@mipmap/ic_launcher"
+            android:roundIcon="@mipmap/ic_launcher"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <!-- Launcher name "Home Gym" (switched in Settings) -->
+        <activity-alias
+            android:name=".LauncherHomeGym"
+            android:targetActivity=".MainActivity"
+            android:label="Home Gym"
+            android:icon="@mipmap/ic_launcher"
+            android:roundIcon="@mipmap/ic_launcher"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <!-- Launcher name "Train" (switched in Settings) -->
+        <activity-alias
+            android:name=".LauncherTrain"
+            android:targetActivity=".MainActivity"
+            android:label="Train"
+            android:icon="@mipmap/ic_launcher"
+            android:roundIcon="@mipmap/ic_launcher"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
     </application>
 </manifest>

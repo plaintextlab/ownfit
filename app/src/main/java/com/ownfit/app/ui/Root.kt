@@ -95,12 +95,19 @@ private fun TabsHost(state: AppState, nav: Nav) {
     Scaffold(
         bottomBar = {
             NavigationBar {
+                val gb = com.ownfit.app.ui.theme.gruvbox()
                 Tab.entries.forEachIndexed { i, t ->
+                    val tint = when (t) { Tab.TODAY -> gb.yellow; Tab.WORKOUTS -> gb.aqua; Tab.PROGRESS -> gb.orange }
                     NavigationBarItem(
                         selected = tab == i,
                         onClick = { tab = i },
                         icon = { Icon(t.icon, null) },
                         label = { Text(t.label) },
+                        colors = androidx.compose.material3.NavigationBarItemDefaults.colors(
+                            selectedIconColor = tint,
+                            selectedTextColor = tint,
+                            indicatorColor = tint.copy(alpha = 0.18f),
+                        ),
                     )
                 }
             }

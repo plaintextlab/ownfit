@@ -22,6 +22,10 @@ import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.outlined.FormatQuote
 import androidx.compose.material.icons.outlined.LocalFireDepartment
 import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.icons.outlined.DarkMode
+import androidx.compose.material.icons.outlined.WbSunny
+import androidx.compose.material.icons.outlined.Tune
+import androidx.compose.material.icons.outlined.LightMode
 import androidx.compose.material.icons.outlined.Shuffle
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -95,6 +99,18 @@ fun HomeScreen(state: AppState, nav: Nav) {
                 }
             }
             TrainerButton(state) { pickTrainer = true }
+            val dark = com.ownfit.app.ui.theme.isDark(state.settings.theme)
+            IconButton(onClick = {
+                com.ownfit.app.OwnFitApp.instance.store.updateSettings {
+                    it.copy(theme = if (dark) com.ownfit.app.data.ThemeMode.LIGHT else com.ownfit.app.data.ThemeMode.DARK)
+                }
+            }) {
+                Icon(
+                    if (dark) Icons.Outlined.LightMode else Icons.Outlined.DarkMode,
+                    if (dark) "Switch to light mode" else "Switch to dark mode",
+                    tint = com.ownfit.app.ui.theme.gruvbox().yellow,
+                )
+            }
             IconButton(onClick = { nav.go(Screen.Settings) }) { Icon(Icons.Outlined.Settings, "Settings") }
         }
 
@@ -117,7 +133,7 @@ fun HomeScreen(state: AppState, nav: Nav) {
 
         // Today's plan
         if (today != null) {
-            SectionTitle("Today · ${today.title}")
+            SectionTitle("Today · ${today.title}", icon = Icons.Outlined.WbSunny, tint = com.ownfit.app.ui.theme.gruvbox().yellow)
             WorkoutCard(state, today.workout, today.focus, big = true, nav = nav, onStart = {
                 nav.go(Screen.Player(today.workout, fromPlan = true))
             })
@@ -136,7 +152,7 @@ fun HomeScreen(state: AppState, nav: Nav) {
         }
 
         // Quick pick
-        SectionTitle("Or train something specific")
+        SectionTitle("Or train something specific", icon = Icons.Outlined.Tune, tint = com.ownfit.app.ui.theme.gruvbox().aqua)
         LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             items(focusOptions) { f ->
                 FilterChip(selected = focus == f, onClick = { focus = if (focus == f) null else f }, label = { Text(f.label) })

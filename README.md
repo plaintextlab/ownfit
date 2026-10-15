@@ -31,7 +31,8 @@ A fast, minimal Material 3 home-workout app for Android — with or without dumb
 - **Git sync** — back up and sync everything to any HTTPS git repo (see below).
 - **Optional AI coach** — with your Anthropic API key, Claude designs the plan (choosing only from
   exercises that passed the on-device safety filter). Without a key, a fast on-device coach does it.
-- Light / dark / system theme, Material You dynamic color, daily motivational quote.
+- Gruvbox dark / light theme (quick toggle on the home screen, or follow the system), daily motivational quote.
+- Choose the app name shown in your launcher (presets, or any name as a home-screen shortcut).
 
 ## Git sync
 

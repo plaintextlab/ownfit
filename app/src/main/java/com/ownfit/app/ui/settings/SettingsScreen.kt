@@ -20,6 +20,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.Sync
+import androidx.compose.material.icons.outlined.FitnessCenter
+import androidx.compose.material.icons.outlined.Palette
+import androidx.compose.material.icons.outlined.Apps
+import androidx.compose.material.icons.outlined.RecordVoiceOver
+import androidx.compose.material.icons.outlined.MusicNote
+import androidx.compose.material.icons.outlined.Timer
+import androidx.compose.material.icons.outlined.AutoAwesome
+import androidx.compose.material.icons.outlined.Storage
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -72,6 +80,7 @@ fun SettingsScreen(state: AppState, nav: Nav) {
     var syncing by remember { mutableStateOf(false) }
     var confirmReset by remember { mutableStateOf(false) }
     var pickTrainer by remember { mutableStateOf(false) }
+    var launcherName by remember { mutableStateOf(com.ownfit.app.LauncherName.current(OwnFitApp.instance)) }
     if (pickTrainer) com.ownfit.app.ui.home.TrainerPickerSheet(state) { pickTrainer = false }
     val ctx = androidx.compose.ui.platform.LocalContext.current
     val musicPicker = androidx.activity.compose.rememberLauncherForActivityResult(
@@ -107,7 +116,7 @@ fun SettingsScreen(state: AppState, nav: Nav) {
             Modifier.fillMaxSize().padding(pad).imePadding().verticalScroll(rememberScrollState()).padding(horizontal = 20.dp),
         ) {
             // ---- Training ----
-            SectionTitle("Training")
+            SectionTitle("Training", icon = Icons.Outlined.FitnessCenter, tint = com.ownfit.app.ui.theme.gruvbox().aqua)
             ListItem(
                 headlineContent = { Text("Profile & goals") },
                 supportingContent = {
@@ -130,14 +139,48 @@ fun SettingsScreen(state: AppState, nav: Nav) {
             }
 
             // ---- Appearance ----
-            SectionTitle("Appearance")
+            SectionTitle("Appearance", icon = Icons.Outlined.Palette, tint = com.ownfit.app.ui.theme.gruvbox().yellow)
             Segmented(ThemeMode.entries, s.theme, { it.label }) { t -> store.updateSettings { it.copy(theme = t) } }
-            if (Build.VERSION.SDK_INT >= 31) ToggleRow("Dynamic color", "Match your wallpaper (Material You)", s.dynamicColor) { v ->
-                store.updateSettings { it.copy(dynamicColor = v) }
-            }
 
             // ---- Workout ----
-            SectionTitle("Voice coach")
+            // ---- Launcher name ----
+            SectionTitle("App name", icon = Icons.Outlined.Apps, tint = com.ownfit.app.ui.theme.gruvbox().green)
+            Text(
+                "Name shown under the app icon. Switching can take a few seconds to show in your launcher.",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            com.ownfit.app.ui.components.ChipGroup(
+                com.ownfit.app.LauncherName.presets,
+                { it == launcherName },
+                { it },
+                { n ->
+                    if (n != launcherName) {
+                        com.ownfit.app.LauncherName.apply(ctx, n)
+                        launcherName = n
+                        scope.launch { snack.showSnackbar("Launcher name set to \"$n\"") }
+                    }
+                },
+            )
+            if (com.ownfit.app.LauncherName.canPin(ctx)) {
+                var custom by remember { mutableStateOf("") }
+                Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically, modifier = Modifier.padding(top = 4.dp)) {
+                    OutlinedTextField(
+                        custom, { custom = it.take(25) },
+                        label = { Text("Custom name") },
+                        singleLine = true,
+                        modifier = Modifier.weight(1f),
+                    )
+                    TextButton(enabled = custom.isNotBlank(), onClick = {
+                        val ok = com.ownfit.app.LauncherName.pinCustom(ctx, custom.trim())
+                        scope.launch {
+                            snack.showSnackbar(if (ok) "Confirm to add \"${custom.trim()}\" to your home screen" else "Your launcher doesn't support custom shortcuts")
+                        }
+                    }) { Text("Add to home screen") }
+                }
+            }
+
+            SectionTitle("Voice coach", icon = Icons.Outlined.RecordVoiceOver, tint = com.ownfit.app.ui.theme.gruvbox().purple)
             Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
                 com.ownfit.app.ui.home.TrainerButton(state) { pickTrainer = true }
                 Text(
@@ -147,7 +190,7 @@ fun SettingsScreen(state: AppState, nav: Nav) {
                 )
             }
 
-            SectionTitle("Music")
+            SectionTitle("Music", icon = Icons.Outlined.MusicNote, tint = com.ownfit.app.ui.theme.gruvbox().blue)
             ToggleRow("Play music during workouts", "Pause anytime from the workout screen", s.musicOn) { v ->
                 store.updateSettings { it.copy(musicOn = v) }
             }
@@ -182,20 +225,20 @@ fun SettingsScreen(state: AppState, nav: Nav) {
                 )
             }
 
-            SectionTitle("During workouts")
+            SectionTitle("During workouts", icon = Icons.Outlined.Timer, tint = com.ownfit.app.ui.theme.gruvbox().orange)
             ToggleRow("Voice coach", "${state.trainer.displayName} announces exercises, counts down and motivates", s.voice) { v -> store.updateSettings { it.copy(voice = v) } }
             ToggleRow("Beeps & vibration", "3-2-1 countdown", s.sounds) { v -> store.updateSettings { it.copy(sounds = v) } }
             ToggleRow("Metric units", "kg / cm", s.metric) { v -> store.updateSettings { it.copy(metric = v) } }
 
             // ---- AI ----
-            SectionTitle("AI coach")
+            SectionTitle("AI coach", icon = Icons.Outlined.AutoAwesome, tint = com.ownfit.app.ui.theme.gruvbox().purple)
             ToggleRow("Use Claude to build plans", "Sends your profile (not your name) to Anthropic. Off = on-device coach.", s.aiEnabled) { v ->
                 store.updateSettings { it.copy(aiEnabled = v) }
             }
             if (s.aiEnabled) SecretField("Anthropic API key", state.secrets.anthropicKey) { k -> store.updateSecrets { it.copy(anthropicKey = k) } }
 
             // ---- Sync ----
-            SectionTitle("Sync with git")
+            SectionTitle("Sync with git", icon = Icons.Outlined.Sync, tint = com.ownfit.app.ui.theme.gruvbox().blue)
             Text(
                 "Back up and sync your workouts, plan and history to any HTTPS git repo (GitHub, GitLab, Gitea…). " +
                     "Use a private repo and a personal access token with repo write access.",
@@ -242,7 +285,7 @@ fun SettingsScreen(state: AppState, nav: Nav) {
             }
 
             // ---- Data ----
-            SectionTitle("Data")
+            SectionTitle("Data", icon = Icons.Outlined.Storage, tint = com.ownfit.app.ui.theme.gruvbox().red)
             TextButton(onClick = { confirmReset = true }) { Text("Reset all data on this device", color = MaterialTheme.colorScheme.error) }
             HorizontalDivider(Modifier.padding(vertical = 12.dp))
             Text(
