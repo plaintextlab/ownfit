@@ -54,6 +54,9 @@ import com.ownfit.app.engine.PlanGenerator
 import com.ownfit.app.ui.Nav
 import com.ownfit.app.ui.Screen
 import com.ownfit.app.ui.components.ExerciseAnimation
+import com.ownfit.app.ui.components.ExercisePhotos
+import coil.compose.AsyncImage
+import androidx.compose.ui.layout.ContentScale
 import com.ownfit.app.ui.onboarding.Segmented
 
 @Composable
@@ -136,6 +139,7 @@ fun ExerciseLibraryList(
     var query by rememberSaveable { mutableStateOf("") }
     var muscle by rememberSaveable { mutableStateOf<Muscle?>(null) }
     var cat by rememberSaveable { mutableStateOf<Category?>(null) }
+    val ctx = androidx.compose.ui.platform.LocalContext.current
     val list = remember(state.exercises, query, muscle, cat) {
         state.exercises.filter { e ->
             (query.isBlank() || e.name.contains(query, ignoreCase = true)) &&
@@ -167,12 +171,16 @@ fun ExerciseLibraryList(
                 val sel = e.id in selected
                 ListItem(
                     leadingContent = {
-                        ExerciseAnimation(
-                            e, state.profile?.gender ?: com.ownfit.app.data.Gender.OTHER,
-                            Modifier.size(52.dp).clip(RoundedCornerShape(12.dp))
-                                .background(MaterialTheme.colorScheme.surfaceContainerHigh),
-                            playing = false,
-                        )
+                        val thumb = Modifier.size(52.dp).clip(RoundedCornerShape(12.dp))
+                            .background(MaterialTheme.colorScheme.surfaceContainerHigh)
+                        if (ExercisePhotos.has(ctx, e.id)) {
+                            AsyncImage(ExercisePhotos.uri(e.id, 0), null, thumb, contentScale = ContentScale.Crop)
+                        } else {
+                            ExerciseAnimation(
+                                e, if (state.trainer == com.ownfit.app.data.Trainer.FEMALE) com.ownfit.app.data.Gender.FEMALE else com.ownfit.app.data.Gender.MALE,
+                                thumb, playing = false,
+                            )
+                        }
                     },
                     headlineContent = { Text(e.name) },
                     supportingContent = {

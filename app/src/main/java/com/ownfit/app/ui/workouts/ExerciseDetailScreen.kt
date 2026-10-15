@@ -106,7 +106,7 @@ fun ExerciseDetailScreen(state: AppState, id: String, onBack: () -> Unit) {
         Column(
             Modifier.fillMaxSize().padding(pad).imePadding().verticalScroll(rememberScrollState()).padding(horizontal = 20.dp),
         ) {
-            ExerciseVisual(e, media, state.profile?.gender ?: com.ownfit.app.data.Gender.OTHER, Modifier.fillMaxWidth().height(280.dp))
+            ExerciseVisual(e, media, state.trainer, Modifier.fillMaxWidth().height(320.dp))
             Row(Modifier.padding(top = 12.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 AssistChip({}, { Text(e.category.label) })
                 AssistChip({}, { Text(e.kit.label) })

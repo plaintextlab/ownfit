@@ -1,0 +1,322 @@
+{
+"arm_circles": {
+"frames": 2,
+"source": "Arm Circles"
+},
+"jumping_jacks": {
+"frames": 2,
+"source": "Star Jump"
+},
+"cat_cow_wu": {
+"frames": 2,
+"source": "Cat Stretch"
+},
+"cat_cow": {
+"frames": 2,
+"source": "Cat Stretch"
+},
+"inchworm": {
+"frames": 2,
+"source": "Inchworm"
+},
+"incline_pushup": {
+"frames": 2,
+"source": "Incline Push-Up"
+},
+"pushup": {
+"frames": 2,
+"source": "Pushups"
+},
+"wide_pushup": {
+"frames": 2,
+"source": "Push-Up Wide"
+},
+"archer_pushup": {
+"frames": 2,
+"source": "Push-Up Wide"
+},
+"decline_pushup": {
+"frames": 2,
+"source": "Decline Push-Up"
+},
+"diamond_pushup": {
+"frames": 2,
+"source": "Close-Grip Push-Up off of a Dumbbell"
+},
+"db_floor_press": {
+"frames": 2,
+"source": "Dumbbell Floor Press"
+},
+"db_bench_press": {
+"frames": 2,
+"source": "Dumbbell Bench Press"
+},
+"db_squeeze_press": {
+"frames": 2,
+"source": "Close-Grip Dumbbell Press"
+},
+"db_fly": {
+"frames": 2,
+"source": "Dumbbell Flyes"
+},
+"band_chest_press": {
+"frames": 2,
+"source": "Standing Cable Chest Press"
+},
+"superman": {
+"frames": 2,
+"source": "Superman"
+},
+"table_row": {
+"frames": 2,
+"source": "Inverted Row"
+},
+"db_row": {
+"frames": 2,
+"source": "One-Arm Dumbbell Row"
+},
+"db_bent_row": {
+"frames": 2,
+"source": "Bent Over Two-Dumbbell Row"
+},
+"db_reverse_fly": {
+"frames": 2,
+"source": "Reverse Flyes"
+},
+"band_pull_apart": {
+"frames": 2,
+"source": "Band Pull Apart"
+},
+"pullup": {
+"frames": 2,
+"source": "Pullups"
+},
+"chinup_negative": {
+"frames": 2,
+"source": "Chin-Up"
+},
+"dead_hang": {
+"frames": 1,
+"source": "Pullups"
+},
+"kb_swing": {
+"frames": 2,
+"source": "One-Arm Kettlebell Swings"
+},
+"db_shoulder_press": {
+"frames": 2,
+"source": "Dumbbell Shoulder Press"
+},
+"db_single_press": {
+"frames": 2,
+"source": "Dumbbell One-Arm Shoulder Press"
+},
+"db_lateral_raise": {
+"frames": 2,
+"source": "Side Lateral Raise"
+},
+"db_front_raise": {
+"frames": 2,
+"source": "Front Dumbbell Raise"
+},
+"db_arnold": {
+"frames": 2,
+"source": "Arnold Dumbbell Press"
+},
+"chair_dip": {
+"frames": 2,
+"source": "Bench Dips"
+},
+"db_curl": {
+"frames": 2,
+"source": "Dumbbell Bicep Curl"
+},
+"db_hammer_curl": {
+"frames": 2,
+"source": "Hammer Curls"
+},
+"db_conc_curl": {
+"frames": 2,
+"source": "Concentration Curls"
+},
+"db_overhead_ext": {
+"frames": 2,
+"source": "Standing Dumbbell Triceps Extension"
+},
+"db_kickback": {
+"frames": 2,
+"source": "Tricep Dumbbell Kickback"
+},
+"chair_squat": {
+"frames": 2,
+"source": "Sit Squats"
+},
+"squat": {
+"frames": 2,
+"source": "Bodyweight Squat"
+},
+"glute_bridge": {
+"frames": 2,
+"source": "Butt Lift (Bridge)"
+},
+"bridge_pose": {
+"frames": 1,
+"source": "Butt Lift (Bridge)"
+},
+"single_leg_bridge": {
+"frames": 2,
+"source": "Single Leg Glute Bridge"
+},
+"reverse_lunge": {
+"frames": 2,
+"source": "Bodyweight Walking Lunge"
+},
+"calf_raise": {
+"frames": 2,
+"source": "Standing Calf Raises"
+},
+"donkey_kick": {
+"frames": 2,
+"source": "Glute Kickback"
+},
+"side_leg_raise": {
+"frames": 2,
+"source": "Side Leg Raises"
+},
+"bulgarian_split": {
+"frames": 2,
+"source": "Split Squats"
+},
+"step_up": {
+"frames": 2,
+"source": "Step-up with Knee Raise"
+},
+"db_goblet_squat": {
+"frames": 2,
+"source": "Goblet Squat"
+},
+"db_rdl": {
+"frames": 2,
+"source": "Stiff-Legged Dumbbell Deadlift"
+},
+"db_lunge": {
+"frames": 2,
+"source": "Dumbbell Lunges"
+},
+"db_sumo_squat": {
+"frames": 2,
+"source": "Plie Dumbbell Squat"
+},
+"db_hip_thrust": {
+"frames": 2,
+"source": "Barbell Hip Thrust"
+},
+"band_lateral_walk": {
+"frames": 2,
+"source": "Monster Walk"
+},
+"dead_bug": {
+"frames": 2,
+"source": "Dead Bug"
+},
+"plank": {
+"frames": 2,
+"source": "Plank"
+},
+"side_plank": {
+"frames": 2,
+"source": "Side Bridge"
+},
+"crunch": {
+"frames": 2,
+"source": "Crunches"
+},
+"bicycle_crunch": {
+"frames": 2,
+"source": "Air Bike"
+},
+"leg_raise": {
+"frames": 2,
+"source": "Flat Bench Lying Leg Raise"
+},
+"russian_twist": {
+"frames": 2,
+"source": "Russian Twist"
+},
+"heel_taps": {
+"frames": 2,
+"source": "Alternate Heel Touchers"
+},
+"pallof_press": {
+"frames": 2,
+"source": "Pallof Press"
+},
+"db_woodchop": {
+"frames": 2,
+"source": "Standing Cable Wood Chop"
+},
+"hanging_knee_raise": {
+"frames": 2,
+"source": "Hanging Leg Raise"
+},
+"butt_kicks": {
+"frames": 2,
+"source": "Single Leg Butt Kick"
+},
+"mountain_climbers": {
+"frames": 2,
+"source": "Mountain Climbers"
+},
+"squat_jump": {
+"frames": 2,
+"source": "Freehand Jump Squat"
+},
+"skater": {
+"frames": 2,
+"source": "Skating"
+},
+"db_thruster": {
+"frames": 2,
+"source": "Kettlebell Thruster"
+},
+"hamstring_stretch": {
+"frames": 2,
+"source": "Hamstring Stretch"
+},
+"quad_stretch": {
+"frames": 2,
+"source": "Quad Stretch"
+},
+"chest_stretch": {
+"frames": 2,
+"source": "Chest And Front Of Shoulder Stretch"
+},
+"cross_body_stretch": {
+"frames": 2,
+"source": "Shoulder Stretch"
+},
+"figure_four": {
+"frames": 2,
+"source": "Ankle On The Knee"
+},
+"neck_release": {
+"frames": 2,
+"source": "Side Neck Stretch"
+},
+"triceps_stretch": {
+"frames": 2,
+"source": "Triceps Stretch"
+},
+"childs_pose": {
+"frames": 2,
+"source": "Child's Pose"
+},
+"low_lunge": {
+"frames": 2,
+"source": "Kneeling Hip Flexor"
+},
+"seated_twist": {
+"frames": 2,
+"source": "Spinal Stretch"
+}
+}

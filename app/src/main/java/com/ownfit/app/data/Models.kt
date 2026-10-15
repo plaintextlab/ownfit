@@ -204,6 +204,25 @@ data class Session(
     val fromPlan: Boolean = false,
 )
 
+/** The voice coach heard during workouts. */
+@Serializable
+enum class Trainer(val id: String, val displayName: String, val blurb: String) {
+    MALE("male", "Alex", "Male voice · strength coach"),
+    FEMALE("female", "Maya", "Female voice · fitness & yoga coach");
+
+    companion object {
+        fun defaultFor(g: Gender?) = if (g == Gender.FEMALE) FEMALE else MALE
+    }
+}
+
+/** Bundled royalty-free tracks (Kevin MacLeod, incompetech.com, CC BY 4.0). */
+enum class MusicTrack(val id: String, val title: String) {
+    WERQ("werq", "Werq"),
+    VOLATILE("volatile_reaction", "Volatile Reaction"),
+    MOVEMENT("movement_proposition", "Movement Proposition"),
+    CALM("meditation_impromptu", "Meditation Impromptu"),
+}
+
 @Serializable
 enum class ThemeMode(val label: String) { SYSTEM("System"), LIGHT("Light"), DARK("Dark") }
 
@@ -221,6 +240,13 @@ data class Settings(
     val autoSync: Boolean = false,
     val lastSync: Long = 0,
     val aiEnabled: Boolean = false,
+    /** null = follow the profile's gender. */
+    val trainer: Trainer? = null,
+    val musicOn: Boolean = true,
+    /** A [MusicTrack] id, or "mine" for the user's own files. */
+    val music: String = "werq",
+    val musicVolume: Float = 0.45f,
+    val myMusic: List<String> = emptyList(),
 )
 
 /** Secrets — never written to the git repo. */

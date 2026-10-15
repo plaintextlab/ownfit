@@ -132,7 +132,7 @@ fun OnboardingScreen(state: AppState, initial: Profile?, onDone: () -> Unit) {
                         )
                     }
                     1 -> {
-                        Question("How do you identify?", "Used for calorie estimates and the athlete figures you'll see.")
+                        Question("How do you identify?", "Used for calorie estimates and to pick your coach's voice (you can switch anytime).")
                         Gender.entries.forEach { g ->
                             ChoiceCard(g.label, null, p.gender == g) { p = p.copy(gender = g) }
                         }

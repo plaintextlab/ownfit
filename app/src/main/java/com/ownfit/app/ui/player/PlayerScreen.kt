@@ -69,6 +69,10 @@ import com.ownfit.app.ui.components.ExerciseVisual
 import com.ownfit.app.ui.components.YouTubeEmbed
 import com.ownfit.app.ui.components.fmtClock
 import kotlinx.coroutines.delay
+import com.ownfit.app.audio.Coach
+import com.ownfit.app.audio.Music
+import androidx.compose.material.icons.outlined.MusicNote
+import androidx.compose.material.icons.outlined.MusicOff
 
 private sealed interface Step {
     val seconds: Int?
@@ -108,9 +112,14 @@ fun PlayerScreen(state: AppState, workout: Workout, fromPlan: Boolean, onExit: (
     val app = OwnFitApp.instance
     val ctx = LocalContext.current
     val steps = remember(workout) { buildSteps(workout, state) }
-    val gender = state.profile?.gender ?: com.ownfit.app.data.Gender.OTHER
-    val cues = remember { Cues(ctx, state.settings.voice, state.settings.sounds) }
-    DisposableEffect(Unit) { onDispose { cues.release() } }
+    val trainer = state.trainer
+    val cues = remember { Coach(ctx, trainer, state.settings.voice, state.settings.sounds) }
+    DisposableEffect(Unit) {
+        // Calm music for yoga and breathing unless the user picked their own songs
+        val calm = workout.focus == com.ownfit.app.data.Focus.YOGA || workout.focus == com.ownfit.app.data.Focus.BREATHE
+        Music.start(ctx, if (calm && state.settings.music != "mine") state.settings.copy(music = com.ownfit.app.data.MusicTrack.CALM.id) else state.settings)
+        onDispose { cues.release(); Music.stop() }
+    }
 
     val view = LocalView.current
     DisposableEffect(Unit) {
@@ -128,19 +137,14 @@ fun PlayerScreen(state: AppState, workout: Workout, fromPlan: Boolean, onExit: (
     val startedAt = remember { System.currentTimeMillis() }
 
     fun goTo(i: Int) {
-        if (i >= steps.size) { finished = true; cues.say("Workout complete. Great job!"); return }
+        if (i >= steps.size) { finished = true; cues.done(); return }
         index = i.coerceAtLeast(0)
         remaining = steps[index].seconds ?: 0
         showVideo = false
         when (val s = steps[index]) {
-            is Step.Ready -> cues.say("Get ready. First up: ${s.next.exercise?.name}")
-            is Step.Work -> {
-                cues.go()
-                val what = s.seconds?.let { "$it seconds" } ?: "${s.item.reps} reps"
-                val side = s.side?.let { if (it == 1) ", first side" else ", other side" } ?: ""
-                cues.say("${s.exercise?.name}. $what$side")
-            }
-            is Step.Rest -> cues.say("Rest. Next: ${s.next.exercise?.name}")
+            is Step.Ready -> cues.ready(s.next.exercise)
+            is Step.Work -> cues.work(s.exercise, s.item, s.side, lastSet = s.set == s.sets)
+            is Step.Rest -> cues.rest(s.next.exercise)
         }
     }
 
@@ -154,7 +158,9 @@ fun PlayerScreen(state: AppState, workout: Workout, fromPlan: Boolean, onExit: (
             val s = steps[index]
             if (s.seconds != null) {
                 remaining--
-                if (remaining in 1..3) cues.tick()
+                // Spoken 3-2-1 only on work/longer rests so it doesn't cut off the "next up" call
+                if (remaining in 1..3 && (s is Step.Work || (s.seconds ?: 0) >= 10)) cues.countdown(remaining)
+                if (s is Step.Work && s.exercise?.breath == null && (s.seconds ?: 0) >= 30 && remaining == (s.seconds ?: 0) / 2) cues.encourage(halfway = true)
                 if (remaining <= 0) { goTo(index + 1); break }
             }
         }
@@ -205,7 +211,10 @@ fun PlayerScreen(state: AppState, workout: Workout, fromPlan: Boolean, onExit: (
                 progress = { (index + 1f) / steps.size },
                 modifier = Modifier.weight(1f).padding(horizontal = 8.dp),
             )
-            Text(fmtClock(elapsed), style = MaterialTheme.typography.labelLarge, modifier = Modifier.padding(horizontal = 12.dp))
+            Text(fmtClock(elapsed), style = MaterialTheme.typography.labelLarge, modifier = Modifier.padding(horizontal = 4.dp))
+            if (Music.active) IconButton(onClick = { Music.toggle() }) {
+                Icon(if (Music.playing) Icons.Outlined.MusicNote else Icons.Outlined.MusicOff, if (Music.playing) "Pause music" else "Play music")
+            }
         }
 
         Column(
@@ -234,11 +243,11 @@ fun PlayerScreen(state: AppState, workout: Workout, fromPlan: Boolean, onExit: (
             Spacer(Modifier.height(16.dp))
             val breath = work.exercise?.breath
             if (step is Step.Work && breath != null) {
-                androidx.compose.runtime.key(index) { BreathingGuide(breath, paused) { phase -> cues.say(phase) } }
+                androidx.compose.runtime.key(index) { BreathingGuide(breath, paused) { phase -> cues.breath(phase) } }
             } else if (showVideo && media?.youtube != null) {
                 YouTubeEmbed(media.youtube)
             } else {
-                ExerciseVisual(work.exercise, media, gender, Modifier.fillMaxWidth().height(260.dp), playing = !paused)
+                ExerciseVisual(work.exercise, media, trainer, Modifier.fillMaxWidth().height(300.dp), playing = !paused)
             }
 
             if (media?.youtube != null && breath == null) {

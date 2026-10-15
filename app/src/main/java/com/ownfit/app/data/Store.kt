@@ -36,6 +36,8 @@ data class AppState(
     private val index by lazy { exercises.associateBy { it.id } }
     fun exercise(id: String): Exercise? = index[id] ?: customExercises.firstOrNull { it.id == id }
     val activeWorkouts get() = workouts.filter { !it.deleted }
+    /** The chosen trainer, defaulting to one matching the user's gender. */
+    val trainer: Trainer get() = settings.trainer ?: Trainer.defaultFor(profile?.gender)
 }
 
 /**

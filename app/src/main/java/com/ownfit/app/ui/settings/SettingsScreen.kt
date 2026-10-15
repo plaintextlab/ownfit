@@ -71,6 +71,19 @@ fun SettingsScreen(state: AppState, nav: Nav) {
     var busy by remember { mutableStateOf(false) }
     var syncing by remember { mutableStateOf(false) }
     var confirmReset by remember { mutableStateOf(false) }
+    var pickTrainer by remember { mutableStateOf(false) }
+    if (pickTrainer) com.ownfit.app.ui.home.TrainerPickerSheet(state) { pickTrainer = false }
+    val ctx = androidx.compose.ui.platform.LocalContext.current
+    val musicPicker = androidx.activity.compose.rememberLauncherForActivityResult(
+        androidx.activity.result.contract.ActivityResultContracts.OpenMultipleDocuments(),
+    ) { uris ->
+        if (uris.isNotEmpty()) {
+            uris.forEach { u ->
+                runCatching { ctx.contentResolver.takePersistableUriPermission(u, android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION) }
+            }
+            store.updateSettings { st -> st.copy(myMusic = (st.myMusic + uris.map { it.toString() }).distinct(), music = "mine") }
+        }
+    }
 
     fun rebuild() {
         busy = true
@@ -124,8 +137,53 @@ fun SettingsScreen(state: AppState, nav: Nav) {
             }
 
             // ---- Workout ----
+            SectionTitle("Voice coach")
+            Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
+                com.ownfit.app.ui.home.TrainerButton(state) { pickTrainer = true }
+                Text(
+                    "  ${state.trainer.blurb}",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+
+            SectionTitle("Music")
+            ToggleRow("Play music during workouts", "Pause anytime from the workout screen", s.musicOn) { v ->
+                store.updateSettings { it.copy(musicOn = v) }
+            }
+            if (s.musicOn) {
+                com.ownfit.app.ui.components.ChipGroup(
+                    com.ownfit.app.data.MusicTrack.entries.map { it.id } + "mine",
+                    { it == s.music },
+                    { id -> com.ownfit.app.data.MusicTrack.entries.firstOrNull { it.id == id }?.title ?: "My music (${s.myMusic.size})" },
+                    { id ->
+                        if (id == "mine" && s.myMusic.isEmpty()) musicPicker.launch(arrayOf("audio/*"))
+                        else store.updateSettings { it.copy(music = id) }
+                    },
+                )
+                Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
+                    Text("Volume", style = MaterialTheme.typography.bodyMedium)
+                    androidx.compose.material3.Slider(
+                        value = s.musicVolume,
+                        onValueChange = { v -> store.updateSettings { it.copy(musicVolume = v) }; com.ownfit.app.audio.Music.setVolume(v) },
+                        modifier = Modifier.weight(1f).padding(start = 12.dp),
+                    )
+                }
+                Row {
+                    TextButton(onClick = { musicPicker.launch(arrayOf("audio/*")) }) { Text("Add my music") }
+                    if (s.myMusic.isNotEmpty()) TextButton(onClick = {
+                        store.updateSettings { it.copy(myMusic = emptyList(), music = if (it.music == "mine") "werq" else it.music) }
+                    }) { Text("Clear my music") }
+                }
+                Text(
+                    "Bundled music by Kevin MacLeod (incompetech.com), licensed CC BY 4.0.",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+
             SectionTitle("During workouts")
-            ToggleRow("Voice coach", "Announces exercises and rest", s.voice) { v -> store.updateSettings { it.copy(voice = v) } }
+            ToggleRow("Voice coach", "${state.trainer.displayName} announces exercises, counts down and motivates", s.voice) { v -> store.updateSettings { it.copy(voice = v) } }
             ToggleRow("Beeps & vibration", "3-2-1 countdown", s.sounds) { v -> store.updateSettings { it.copy(sounds = v) } }
             ToggleRow("Metric units", "kg / cm", s.metric) { v -> store.updateSettings { it.copy(metric = v) } }
 
@@ -188,7 +246,9 @@ fun SettingsScreen(state: AppState, nav: Nav) {
             TextButton(onClick = { confirmReset = true }) { Text("Reset all data on this device", color = MaterialTheme.colorScheme.error) }
             HorizontalDivider(Modifier.padding(vertical = 12.dp))
             Text(
-                "OwnFit 1.0 · Exercises are suggestions, not medical advice. Stop if you feel pain and consult a professional for injuries.",
+                "OwnFit · Exercises are suggestions, not medical advice. Stop if you feel pain and consult a professional for injuries.\n\n" +
+                    "Credits: exercise photos from free-exercise-db (public domain). Voices generated with Piper TTS " +
+                    "(Joe – CC0, Kristin – public domain). Music by Kevin MacLeod (incompetech.com), CC BY 4.0.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )

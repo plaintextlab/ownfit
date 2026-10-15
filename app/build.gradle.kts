@@ -45,6 +45,7 @@ android {
     }
     kotlinOptions { jvmTarget = "17" }
     buildFeatures { compose = true }
+    androidResources { noCompress += listOf("ogg") }
 
     packaging {
         resources {

@@ -20,8 +20,13 @@ A fast, minimal Material 3 home-workout app for Android — with or without dumb
 - **Your own workouts** — build routines from 120+ exercises, or create custom exercises.
 - **Your own demos** — attach a YouTube link (plays inline) and/or a GIF/image (URL or from your phone)
   to any exercise; it's shown during the workout.
-- **Athlete figures** — a male/female/neutral figure (drawn in code, matching your profile) highlights
-  the muscles each exercise targets.
+- **Real exercise demos** — 80 exercises show real-person start/end photos looping as a demo; the rest
+  (mostly yoga, breathing and a few cardio moves) use a built-in animated figure. A small muscle map
+  shows what each move targets. You can still attach your own GIF/image or YouTube link to any exercise.
+- **Voice coach** — choose **Alex** (male voice) or **Maya** (female voice) from the home screen. Natural
+  pre-recorded voices announce each move, reps or time, sides, countdowns, halfway cheers and breathing
+  cues; music ducks while the coach talks.
+- **Background music** — four bundled royalty-free tracks or your own songs; play/pause and skip during workouts.
 - **Progress** — streak, weekly goal, minutes, calories estimate, 16-week heatmap, history.
 - **Git sync** — back up and sync everything to any HTTPS git repo (see below).
 - **Optional AI coach** — with your Anthropic API key, Claude designs the plan (choosing only from
@@ -62,7 +67,23 @@ installs directly — set up your own signing config before publishing). CI buil
 ## Tech
 
 Kotlin · Jetpack Compose · Material 3 · kotlinx.serialization (JSON files, no database) · Coil (GIFs) ·
-JGit (sync) · Anthropic Java SDK (optional AI). minSdk 26, R8-shrunk release ~7 MB.
+JGit (sync) · Anthropic Java SDK (optional AI). minSdk 26.
+
+## Regenerating assets
+
+- Exercise photos: `python scripts/fetch_exercise_photos.py` (mapping lives in that script).
+- Voices: `python scripts/gen_voices.py <piper dir>` ([Piper](https://github.com/rhasspy/piper)).
+- Animated-figure keyframes: `app/src/main/java/com/ownfit/app/anim/Motions.kt`; review with
+  `./gradlew :app:testDebugUnitTest --tests "com.ownfit.app.anim.*"` then `python scripts/render_motions.py`.
+
+## Credits
+
+- Exercise photos: [free-exercise-db](https://github.com/yuhonas/free-exercise-db) (Unlicense / public
+  domain). Note: the dataset does not document the photos' original source — review before publishing commercially.
+- Voices: Piper TTS — `en_US-joe-medium` (CC0) and `en_US-kristin-medium` (public domain).
+- Music: Kevin MacLeod ([incompetech.com](https://incompetech.com)) — *Werq*, *Volatile Reaction*,
+  *Movement Proposition*, *Meditation Impromptu 01* — licensed under
+  [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
 
 ## Disclaimer
 

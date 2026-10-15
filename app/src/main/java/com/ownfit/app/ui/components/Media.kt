@@ -27,6 +27,7 @@ import com.ownfit.app.OwnFitApp
 import com.ownfit.app.data.Exercise
 import com.ownfit.app.data.Gender
 import com.ownfit.app.data.Media
+import com.ownfit.app.data.Trainer
 
 object YouTube {
     private val patterns = listOf(
@@ -51,8 +52,10 @@ object YouTube {
 
 /** User GIF/image if set, otherwise the built-in animation with a small muscle map. */
 @Composable
-fun ExerciseVisual(exercise: Exercise?, media: Media?, gender: Gender, modifier: Modifier = Modifier, playing: Boolean = true) {
+fun ExerciseVisual(exercise: Exercise?, media: Media?, trainer: Trainer, modifier: Modifier = Modifier, playing: Boolean = true) {
     val model = OwnFitApp.instance.store.resolveMedia(media?.image)
+    val ctx = LocalContext.current
+    val gender = if (trainer == Trainer.FEMALE) Gender.FEMALE else Gender.MALE
     Box(modifier, contentAlignment = Alignment.Center) {
         if (model != null) {
             AsyncImage(
@@ -62,7 +65,11 @@ fun ExerciseVisual(exercise: Exercise?, media: Media?, gender: Gender, modifier:
                 modifier = Modifier.fillMaxWidth().heightIn(max = 320.dp).clip(RoundedCornerShape(24.dp)),
             )
         } else {
-            ExerciseAnimation(exercise, gender, Modifier.fillMaxSize(), playing = playing)
+            if (exercise != null && ExercisePhotos.has(ctx, exercise.id)) {
+                ExercisePhotoLoop(exercise.id, Modifier.fillMaxSize(), playing = playing)
+            } else {
+                ExerciseAnimation(exercise, gender, Modifier.fillMaxSize(), playing = playing)
+            }
             if (exercise?.muscles?.isNotEmpty() == true) {
                 BodyFigure(gender, exercise.muscles, Modifier.align(Alignment.TopEnd).padding(4.dp).width(34.dp))
             }

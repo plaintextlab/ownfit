@@ -71,6 +71,8 @@ fun HomeScreen(state: AppState, nav: Nav) {
     var minutes by rememberSaveable { mutableIntStateOf(profile.minutes) }
     var shuffle by rememberSaveable { mutableLongStateOf(0L) }
     var quote by remember { mutableStateOf(Quotes.today()) }
+    var pickTrainer by remember { mutableStateOf(false) }
+    if (pickTrainer) TrainerPickerSheet(state) { pickTrainer = false }
 
     val focusOptions = Focus.entries.filter {
         (it != Focus.YOGA || profile.includeYoga) && (it != Focus.BREATHE || profile.includeBreathing)
@@ -92,6 +94,7 @@ fun HomeScreen(state: AppState, nav: Nav) {
                     )
                 }
             }
+            TrainerButton(state) { pickTrainer = true }
             IconButton(onClick = { nav.go(Screen.Settings) }) { Icon(Icons.Outlined.Settings, "Settings") }
         }
 
